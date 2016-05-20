@@ -3,7 +3,6 @@
 extern int main();
 
 void init(void);
-
 void Default_Handler(void);
 
 // The following are 'declared' in the linker script
