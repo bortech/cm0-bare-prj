@@ -1,29 +1,31 @@
-/* useful reference: www.linuxselfhelp.com/gnu/ld/html_chapter/ld_toc.html */
 MEMORY
 {
-    flash : org = 0x00000000, len = 32k
-    ram : org = 0x10000000, len = 8k
+    FLASH (rx): ORIGIN = 0x00000000, LENGTH = 32k
+    RAM (rwx): ORIGIN = 0x10000000, LENGTH = 8k
 }
   
 SECTIONS
 {        
-	. = ORIGIN(flash);
+	. = ORIGIN(FLASH);
      .text : {
-		  *(.vectors); /* The interrupt vectors */
-		  *(.text);
-        } >flash
+		  KEEP(*(.vectors));
+		  *(.text*)
+			*(.rodata*)
+        } > FLASH
 
-	. = ORIGIN(ram);
+	. = ORIGIN(RAM);
         .data : {
 	  INIT_DATA_VALUES = LOADADDR(.data);
 	  INIT_DATA_START = .;
-	    *(.data);
+	    *(.data*)
 	  INIT_DATA_END = .;
-        } >ram AT>flash
+        } >RAM AT>FLASH
 
-	BSS_START = .;
-	.bss : {	  
-	    *(.bss);	  
-	} > ram
-	BSS_END = .;
+	.bss : {	 
+	 . = ALIGN(4);	
+		BSS_START = .;
+	   *(.bss*)	  
+	 . = ALIGN(4);	
+		BSS_END = .;
+	} > RAM
 }

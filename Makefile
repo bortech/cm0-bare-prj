@@ -32,7 +32,12 @@ CC_FLAGS = $(CPU) -c -MMD -fno-common -fmessage-length=0 -Wall -fno-exceptions -
 CC_SYMBOLS = 
 
 # linker options
-LD_FLAGS = $(CPU) -nostartfiles -Wl,-Map=$(PROJECT).map,--cref
+# link only used sections
+LD_GC = -Wl,--gc-sections
+# generate map file with cross-reference table
+LD_MAP = -Wl,--gc-sections,-Map=$(PROJECT).map,--cref
+# linker flags
+LD_FLAGS = $(CPU) -nostartfiles $(LD_GC) $(LD_MAP)
 
 # main target
 all: $(PROJECT).hex size
