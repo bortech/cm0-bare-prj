@@ -28,8 +28,9 @@ OSC_CLK_KHZ	= 12000
 
 # compiler options
 CPU = -mcpu=cortex-m0 -mthumb
-CC_OPTIMIZE = -Os
-CC_FLAGS = $(CPU) -c -MMD $(CC_OPTIMIZE) -fno-common -fmessage-length=0 -Wall -fno-exceptions -ffunction-sections -fdata-sections -g
+CC_OPTIMIZE = -O2
+CC_COMMON = -nostartfiles -ffreestanding
+CC_FLAGS = $(CPU) -c -MMD $(CC_OPTIMIZE) $(CC_COMMON) -fno-common -fmessage-length=0 -Wall -fno-exceptions -ffunction-sections -fdata-sections -g
 CC_SYMBOLS = 
 
 # linker options
@@ -38,7 +39,7 @@ LD_GC = -Wl,--gc-sections
 # generate map file with cross-reference table
 LD_MAP = -Wl,-Map=$(PROJECT).map,--cref
 # linker flags
-LD_FLAGS = $(CPU) -nostartfiles $(LD_GC) $(LD_MAP)
+LD_FLAGS = $(CPU) $(CC_COMMON) $(LD_GC) $(LD_MAP)
 
 # main target
 all: $(PROJECT).hex size
